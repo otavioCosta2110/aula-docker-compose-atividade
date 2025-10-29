@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <title>Frontend Simples</title>
+</head>
+<body>
+  <h1>Frontend Simples</h1>
+  <form id="dataForm">
+    <input type="text" id="value" placeholder="Digite um valor" required>
+    <button type="submit">Enviar</button>
+  </form>
+  <ul id="dataList"></ul>
+
+  <script>
+    const form = document.getElementById('dataForm');
+    const list = document.getElementById('dataList');
+
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const value = document.getElementById('value').value;
+      await fetch('/api/data', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ value })
+      });
+      loadData();
+    });
+
+    async function loadData() {
+      const response = await fetch('/api/data');
+      const data = await response.json();
+      list.innerHTML = data.map(item => `<li>${item.value}</li>`).join('');
+    }
+
+    loadData();
+  </script>
+</body>
+</html>
